@@ -1,6 +1,6 @@
 # Do as I do motion transfer
 Inspired by [Everybody Dance Now](https://arxiv.org/abs/1808.07371).
 
-The codes are built upon [pytorch-EverybodyDanceNow] (https://github.com/nyoki-mtl/pytorch-EverybodyDanceNow) by nyoki-mtl
+The codes are built upon [pytorch-EverybodyDanceNow](https://github.com/nyoki-mtl/pytorch-EverybodyDanceNow) by nyoki-mtl
 
 This repo is for SFU Machine Learning Fianl Project.
