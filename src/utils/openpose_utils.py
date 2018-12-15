@@ -60,4 +60,4 @@ def get_pose(param, heatmaps, pafs):
     # (Step 4): plot results
     label = create_label(shape, joint_list, person_to_joint_assoc)
 
-    return label
+return label

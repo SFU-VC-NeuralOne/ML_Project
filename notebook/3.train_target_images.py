@@ -14,8 +14,6 @@ from collections import OrderedDict
 from torch.autograd import Variable
 from pathlib import Path
 
-#get_ipython().run_line_magic('matplotlib', 'inline')
-
 
 # In[2]:
 
@@ -24,10 +22,6 @@ pix2pixhd_dir = Path('../src/pix2pixHD/')
 
 import sys
 sys.path.append(str(pix2pixhd_dir))
-
-#get_ipython().run_line_magic('load_ext', 'autoreload')
-#get_ipython().run_line_magic('autoreload', '2')
-
 
 # In[3]:
 
@@ -44,6 +38,16 @@ from util.visualizer import Visualizer
 
 with open('../data/train_opt.pkl', mode='rb') as f:
     opt = pickle.load(f)
+
+opt.debug=False
+opt.no_html=False
+opt.continue_train=False
+opt.dataroot='/home/mannatk/mlProject/pytorch-EverybodyDanceNow-master/data/target/500Afro'
+opt.num_D=3
+opt.batchSize=1
+opt.niter=10
+opt.niter_decay=10
+opt.max_dataset_size=500
 print(opt)
 iter_path = os.path.join(opt.checkpoints_dir, opt.name, 'iter.txt')
 
@@ -51,29 +55,48 @@ iter_path = os.path.join(opt.checkpoints_dir, opt.name, 'iter.txt')
 # In[5]:
 
 
+iter_path = os.path.join(opt.checkpoints_dir, opt.name, 'iter.txt')
+if opt.continue_train:
+    try:
+        start_epoch, epoch_iter = np.loadtxt(iter_path , delimiter=',', dtype=int)
+    except:
+        start_epoch, epoch_iter = 1, 0
+    print('Resuming from epoch %d at iteration %d' % (start_epoch, epoch_iter))
+else:
+    start_epoch, epoch_iter = 1, 0
+
+if opt.debug:
+    opt.display_freq = 1
+    opt.print_freq = 1
+    opt.niter = 10
+    opt.niter_decay = 10
+    opt.max_dataset_size = 500
+
 data_loader = CreateDataLoader(opt)
 dataset = data_loader.load_data()
 dataset_size = len(data_loader)
 print('#training images = %d' % dataset_size)
-
-start_epoch, epoch_iter = 1, 0
 total_steps = (start_epoch-1) * dataset_size + epoch_iter
 display_delta = total_steps % opt.display_freq
 print_delta = total_steps % opt.print_freq
 save_delta = total_steps % opt.save_latest_freq
+end_epoch=40
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 # In[6]:
 
 
 model = create_model(opt)
+# model=model.to(device)
+model.cuda()
 visualizer = Visualizer(opt)
 
 
 # In[7]:
 
 
-for epoch in range(start_epoch, 100):#opt.niter + opt.niter_decay + 1):
+for epoch in range(start_epoch, opt.niter + opt.niter_decay + 1):#opt.niter + opt.niter_decay + 1):
     epoch_start_time = time.time()
     if epoch != start_epoch:
         epoch_iter = epoch_iter % dataset_size
@@ -108,7 +131,7 @@ for epoch in range(start_epoch, 100):#opt.niter + opt.niter_decay + 1):
         loss_D.backward()
         model.module.optimizer_D.step()
 
-#        call(["nvidia-smi", "--format=csv", "--query-gpu=memory.used,memory.free"])
+       # call(["nvidia-smi", "--format=csv", "--query-gpu=memory.used,memory.free"])
 
         ############## Display results and errors ##########
         ### print out errors
@@ -155,4 +178,3 @@ for epoch in range(start_epoch, 100):#opt.niter + opt.niter_decay + 1):
         model.module.update_learning_rate()
 
 torch.cuda.empty_cache()
-

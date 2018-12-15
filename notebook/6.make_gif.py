@@ -57,8 +57,8 @@ def animate(nframe):
     ax3.set_xticks([])
     ax3.set_yticks([])
 
-#fig = plt.figure(figsize=(12, 6))
-fig=plt.figure()
+fig = plt.figure(figsize=(12, 6))
+#fig=plt.figure()
 ax1 = fig.add_subplot(131)
 ax2 = fig.add_subplot(132)
 ax3 = fig.add_subplot(133)
