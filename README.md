@@ -5,6 +5,7 @@ The codes are built upon [pytorch-EverybodyDanceNow](https://github.com/nyoki-mt
 
 This repo is for SFU Machine Learning Final Project.
 
- Example output:
+
+Example output:
 
 ![Output](final.gif)
