@@ -3,4 +3,6 @@ Inspired by [Everybody Dance Now](https://arxiv.org/abs/1808.07371).
 
 The codes are built upon [pytorch-EverybodyDanceNow](https://github.com/nyoki-mtl/pytorch-EverybodyDanceNow) by nyoki-mtl
 
+![Result](final_1000.mp4)
+
 This repo is for SFU Machine Learning Final Project.
